@@ -17,6 +17,8 @@ class CTF:
         self.lam    = kev_to_lam(float(self.Voltage))
         A           = float(self.AmplitudeContrast)
         self.A_term = np.arctan(A/np.sqrt(1.0-A))
+        if not 'PhaseShift' in kwargs:
+            self.PhaseShift = 0.0
         #precomputed_amplitude_contrast_term = atan(amplitude_contrast / sqrt(1.0 - amplitude_contrast));
 
     def ctf_2d(self,sz,psize):
@@ -56,6 +58,7 @@ class CTF:
         # return PI * wavelength * squared_spatial_frequency * (DefocusGivenAzimuth(
         #     azimuth) - 0.5 * squared_wavelength * squared_spatial_frequency * spherical_aberration) + additional_phase_shift + precomputed_amplitude_contrast_term;
         # }
+
     def phase_flip_cpu(self,im,psize):
         c    = self.ctf_2d(im.shape,psize)
         imff = np.fft.ifftn(np.fft.fftn(im)*np.sign(c))
