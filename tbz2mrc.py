@@ -115,29 +115,36 @@ def multgains(srcmrc, gainmrc, dstmrc, transpose_gain=False):
 
 def extract_tbz(tbzfile,dstdir,gaindm4,nth=1,transpose_gain=False):
     mname   = os.path.basename(tbzfile)
-    dsttbz  = join(dstdir, mname)
-    dstgain = join(dstdir, file_only(mname)+'_gain.dm4')
-    gainmrc = join(dstdir, file_only(mname)+'_gain.mrc')
-    micmrc  = join(dstdir, file_only(mname)+'.mrc')
-    micdm4  = join(dstdir, file_only(mname)+'.dm4')
+    nonly   = file_only(mname)
+    tmpdir  = os.path.join(dstdir,nonly)
+    mkdir_assure(tmpdir)
+
+    dsttbz  = join(tmpdir, mname)
+    dstgain = join(tmpdir, nonly + '_gain.dm4')
+    gainmrc = join(tmpdir, nonly + '_gain.mrc')
+    micdm4  = join(tmpdir, nonly +'.dm4')
+    micmrc  = join(tmpdir, nonly + '.mrc')
+    dstmrc  = join(dstdir, nonly + '.mrc')
     # copy and extract tbz
     shutil.copyfile(tbzfile, dsttbz)
-    untbz(tbzfile,dstdir,nth)
-    os.remove(dsttbz)
+    untbz(tbzfile,tmpdir,nth)
+    # os.remove(dsttbz)
     # convert everything to mrc
     shutil.copyfile(gaindm4, dstgain)
     dm4tomrc(dstgain, gainmrc)
     dm4tomrc(micdm4, micmrc)
-    os.remove(micdm4)
-    os.remove(dstgain)
+    # os.remove(micdm4)
+    # os.remove(dstgain)
     # apply gain
-    multgains(micmrc,gainmrc,micmrc,transpose_gain)
-    os.remove(gainmrc)
+    multgains(micmrc,gainmrc,dstmrc,transpose_gain)
+    # clean up
+    shutil.rmtree(tmpdir)
+    # os.remove(gainmrc)
     # remove backup files
-    out, err, status = sysrun('rm %s' % os.path.join(dstdir,'*.mrc~'))
-    if not status:
-        print out + err
-        assert (status)
+    # out, err, status = sysrun('rm %s' % os.path.join(dstdir,'*.mrc~'))
+    # if not status:
+    #     print out + err
+    #     assert (status)
 
 def get_parser():
     parser = argparse.ArgumentParser(fromfile_prefix_chars='@',
