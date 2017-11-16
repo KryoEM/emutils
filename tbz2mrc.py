@@ -7,15 +7,8 @@ Created on Tue Dec 27 16:58:01 2016
 """
 
 # %%
-# from   myutils import scratch
-# from   myutils import filenames as fn
-# from   myutils.formats import dm4tomrc, stackmrcs, untbz, transpose_mrc
-# from   myutils import mrc
 from   os.path import join, dirname, splitext
-# from   myutils.utils import sysrun, tprint
 import shutil
-from   star import star
-# from   myutils import mpi
 from   functools import partial
 import argparse
 import glob
@@ -205,6 +198,14 @@ if __name__ == "__main__":
 
 
     ################## JUNK ######################################
+
+    # from   myutils import scratch
+    # from   myutils import filenames as fn
+    # from   myutils.formats import dm4tomrc, stackmrcs, untbz, transpose_mrc
+    # from   myutils import mrc
+    # from   myutils.utils import sysrun, tprint
+    # from   star import star
+    # from   myutils import mpi
 
     # # parser.add_argument('-j', '--nthreads', help='Number of threads', default=4, type=int, required=False)
     # parser.add_argument('-s','--save_movies', help='Flag to save aligned movies',
